@@ -8,7 +8,9 @@
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test": "vitest",
+    "test:watch": "vitest --watch"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -16,6 +18,9 @@
     "@mui/material": "^7.1.2",
     "@react-router/node": "^7.5.3",
     "@react-router/serve": "^7.5.3",
+    "@tailwindcss/vite": "^4.1.10",
+    "@testing-library/react": "^16.3.0",
+    "clsx": "^2.1.1",
     "isbot": "^5.1.27",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
@@ -29,16 +34,27 @@
     "@storybook/addon-onboarding": "^9.0.10",
     "@storybook/addon-vitest": "^9.0.10",
     "@storybook/react-vite": "^9.0.10",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@testing-library/jest-dom": "^6.6.3",
     "@types/node": "^20",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@vitest/browser": "^3.2.3",
     "@vitest/coverage-v8": "^3.2.3",
+    "autoprefixer": "^10.4.21",
+    "jsdom": "^26.1.0",
+    "msw": "^2.10.2",
     "playwright": "^1.53.0",
     "storybook": "^9.0.10",
+    "tailwindcss": "^4.1.11",
     "typescript": "^5.8.3",
     "vite": "^6.3.3",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.3"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
   }
 }
