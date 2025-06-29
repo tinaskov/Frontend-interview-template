@@ -1,5 +1,5 @@
-import { Button } from "~/components/Button";
 import type { Route } from "./+types/home";
+import { TaskList } from "~/components/features/tasks/TaskList";
 
 export function loader() {
   return { name: "Dear candidate" };
@@ -7,13 +7,8 @@ export function loader() {
 
 export default function Home({ loaderData }: Route.ComponentProps) {
   return (
-    <div className="text-center p-4">
-      <h1 className="text-2xl">Hello, {loaderData.name}</h1>
-        <Button
-            label="Click Me"
-            variant="contained"
-            onClick={ () => alert("Button clicked!") }
-        />
+    <div className='min-w-xl'>
+      <TaskList />
     </div>
   );
 }
