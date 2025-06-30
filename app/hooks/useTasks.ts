@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import type { Task } from "../types";
+import type { Task, TaskFormData, UpdateTaskData } from "../types";
 import { taskService } from "../services/taskService";
 
 export const useTasks = () => {
@@ -20,7 +20,7 @@ export const useTasks = () => {
     }
   }, []);
 
-  const addTask = async (taskData: { title: string; description?: string }) => {
+  const addTask = async (taskData: TaskFormData) => {
     if (!taskData.title.trim()) return false;
     try {
       const newTask = await taskService.createTask(taskData);
@@ -33,36 +33,31 @@ export const useTasks = () => {
     }
   };
 
-  const updateTask = useCallback(
-    async (taskData: { id: string; title: string; description?: string }) => {
-      if (!taskData.title.trim()) return false;
-      try {
-        await taskService.updateTask(taskData);
-        await fetchTasks();
-        return true;
-      } catch (err) {
-        setError("Failed to update task");
-        return false;
-      }
-    },
-    [fetchTasks]
-  );
+  const updateTask = async (taskData: UpdateTaskData) => {
+    try {
+      const updatedTask = await taskService.updateTask(taskData);
+      setTasks(prev => prev.map(task => (task.id === updatedTask.id ? updatedTask : task)));
+    } catch (err) {
+      setError("Failed to update task");
+    }
+  };
 
-  const toggleTask = useCallback(
-    async (taskId: string) => {
-      const previousTasks = tasks;
-      const updatedTasks = tasks.map(task => (task.id === taskId ? { ...task, completed: !task.completed } : task));
-      try {
-        await taskService.toggleTask(taskId);
-        const sortedTasks = sortTasks(updatedTasks);
-        setTasks(sortedTasks);
-      } catch (err) {
-        setTasks(previousTasks);
-        setError("Failed to update task");
+  const toggleTask = useCallback(async (taskId: string) => {
+    let previousTasks;
+    setTasks(prevTasks => {
+      previousTasks = prevTasks;
+      const updatedTasks = prevTasks.map(task => (task.id === taskId ? { ...task, completed: !task.completed } : task));
+      return sortTasks(updatedTasks);
+    });
+    try {
+      await taskService.toggleTask(taskId);
+    } catch (err) {
+      {
+        previousTasks && setTasks(previousTasks);
       }
-    },
-    [tasks]
-  );
+      setError("Failed to update task");
+    }
+  }, []);
 
   const deleteTask = useCallback(async (taskId: string) => {
     try {
@@ -74,7 +69,7 @@ export const useTasks = () => {
   }, []);
 
   const sortTasks = (tasks: Task[]) => {
-    return tasks.sort((taskA, taskB) => {
+    return [...tasks].sort((taskA, taskB) => {
       if (taskA.completed && !taskB.completed) {
         return 1;
       } else if (!taskA.completed && taskB.completed) {
