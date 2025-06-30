@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { InputField } from "./InputField";
+import type { ChangeEvent } from "react";
 
 const meta: Meta<typeof InputField> = {
   title: "UI/InputField",
@@ -8,7 +9,9 @@ const meta: Meta<typeof InputField> = {
     value: { control: "text" },
     placeholder: { control: "text" },
     disabled: { control: "boolean" },
+    onChange: (event: ChangeEvent<HTMLInputElement>) => console.log("Input changed:", event.target.value),
   },
+  tags: ["autodocs"],
 };
 
 export default meta;
@@ -20,6 +23,7 @@ export const Default: Story = {
     value: "",
     placeholder: "Enter text...",
     disabled: false,
+    onChange: (event: ChangeEvent<HTMLInputElement>) => console.log("Input changed:", event.target.value),
   },
 };
 
@@ -36,5 +40,6 @@ export const WithText: Story = {
     value: "Sample text",
     placeholder: "Enter text...",
     disabled: false,
+    onChange: (event: ChangeEvent<HTMLInputElement>) => console.log("Input changed:", event.target.value),
   },
 };
